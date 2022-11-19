@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from web.formularios.formularioPlatos import FormularioRegistroPlatos
 from web.formularios.formularioEmpleados import FormularioRegistroEmpleados
-
+from web.models import Platos, Empleados
 # Create your views here.
 
 # CADA VISTA ES UNA FUNCION DE PY
@@ -11,7 +11,7 @@ from web.formularios.formularioEmpleados import FormularioRegistroEmpleados
 def Home(request):
     return render(request, 'index.html')
 
-def Platos(request):
+def PlatosVista(request):
 
     #cargar formulario de registro de platos
     formulario = FormularioRegistroPlatos()
@@ -29,11 +29,21 @@ def Platos(request):
         if datosFormulario.is_valid():
             datosLimpios = datosFormulario.cleaned_data
 
-            print(datosLimpios)
+            #ENVIANDO DATOS A MI BASE DE DATOS
+
+            platoNuevo = Platos(
+                nombre=datosLimpios["nombrePlato"],
+                descripcion=datosLimpios["descripcionPlato"],
+                imagen=datosLimpios["imagenPlato"],
+                precio=datosLimpios["precioPlato"],
+                tipo=datosLimpios["tipoPlato"]
+            )
+            platoNuevo.save()
+
 
     return render(request, 'platos.html',diccionarioEnvioDatos)
 
-def Empleados(request):
+def EmpleadosVista(request):
 
     #cargar formulario de registro de platos
     formulario = FormularioRegistroEmpleados()
@@ -51,7 +61,15 @@ def Empleados(request):
         if datosFormularioEmpleados.is_valid():
             datosLimpiosEmpleado = datosFormularioEmpleados.cleaned_data
 
-            print(datosLimpiosEmpleado)
+            empleadoNuevo = Empleados(
+                nombre=datosLimpiosEmpleado["nombre"],
+                descripcion=datosLimpiosEmpleado["descripcion"],
+                imagen_perfil=datosLimpiosEmpleado["imagen_Perfil"],
+                tipo_documento=datosLimpiosEmpleado["Tipo_Documento"],
+                numero_documento=datosLimpiosEmpleado["Numero_Documento"]
+            )
+            empleadoNuevo.save()
+
     return render(request, 'empleados.html',diccionarioEnvioDatosEmpleados)
 
 
